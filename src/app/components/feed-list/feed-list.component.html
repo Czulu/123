@@ -1,0 +1,41 @@
+<nav>
+  <mat-form-field appearance="fill">
+    <mat-select (selectionChange)="onEntriesOnPageChange($event)" [(value)]="entriesOnPage">
+      <mat-option [value]="option.value" *ngFor="let option of entriesDisplayOptions">{{ option.viewValue }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button [disabled]="!before.length || requestInProgress" (click)="navigateBack()" color="primary"><b><</b>Previous</button>
+  <button mat-raised-button [disabled]="!after || requestInProgress" (click)="navigateNext()" color="primary">Next<b>></b></button>
+</nav>
+
+<table mat-table [dataSource]="entries">
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef> Title </th>
+    <td mat-cell *matCellDef="let entry"> {{entry.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="created">
+    <th mat-header-cell *matHeaderCellDef> Created </th>
+    <td mat-cell *matCellDef="let entry"> {{entry.created | date: 'dd/MM/yyyy'}} </td>
+  </ng-container>
+  <ng-container matColumnDef="comments">
+    <th mat-header-cell *matHeaderCellDef> Comments </th>
+    <td mat-cell *matCellDef="let entry"> {{entry.num_comments}} </td>
+  </ng-container>
+  <ng-container matColumnDef="author">
+    <th mat-header-cell *matHeaderCellDef> Author </th>
+    <td mat-cell *matCellDef="let entry"> {{entry.author}} </td>
+  </ng-container>
+  <ng-container matColumnDef="score">
+    <th mat-header-cell *matHeaderCellDef> Score </th>
+    <td mat-cell *matCellDef="let entry"> {{entry.score}} </td>
+  </ng-container>
+  <ng-container matColumnDef="thumbnail">
+    <th mat-header-cell *matHeaderCellDef> Thumbnail </th>
+    <td mat-cell *matCellDef="let entry">
+      <img alt="Thumbnail" src="{{entry.thumbnail}}">
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['title','created','comments','author','score','thumbnail']"></tr>
+  <tr (click)="openEntryDetails(row)" mat-row *matRowDef="let row; columns: ['title','created','comments','author','score','thumbnail'];"></tr>
+</table>
